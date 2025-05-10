@@ -22,6 +22,7 @@
     <ProjectReference Include="..\BookLendingSystem.Application\BookLendingSystem.Application.csproj" />
     <ProjectReference Include="..\BookLendingSystem.Domain\BookLendingSystem.Domain.csproj" />
     <ProjectReference Include="..\BookLendingSystem.Infrastructure\BookLendingSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\BookLendingSystem.Persistence\BookLendingSystem.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
