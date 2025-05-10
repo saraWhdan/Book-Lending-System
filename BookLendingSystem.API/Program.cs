@@ -1,4 +1,7 @@
 using BookLendingSystem.Infrastructure.Context;
+using BookLendingSystem.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+           .AddEntityFrameworkStores<ApplicationDbContext>()
+           .AddDefaultTokenProviders();
+
 });
 var app = builder.Build();
 
