@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLendingSystem.Application.Dtos
+namespace BookLendingSystem.Application.Interfaces.IServices
 {
-    internal class BorrowedBookDto
+    public interface IEmailService
     {
+
+        Task SendEmailReturnAsync();
     }
 }
+

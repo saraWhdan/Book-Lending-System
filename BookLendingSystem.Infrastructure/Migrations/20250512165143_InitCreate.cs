@@ -180,13 +180,21 @@ namespace BookLendingSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    MemberId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ActionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsReturned = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BorrowedBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BorrowedBooks_AspNetUsers_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BorrowedBooks_Books_BookId",
                         column: x => x.BookId,
@@ -238,6 +246,11 @@ namespace BookLendingSystem.Infrastructure.Migrations
                 name: "IX_BorrowedBooks_BookId",
                 table: "BorrowedBooks",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BorrowedBooks_MemberId",
+                table: "BorrowedBooks",
+                column: "MemberId");
         }
 
         /// <inheritdoc />

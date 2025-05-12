@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BookLendingSystem.Application.Dtos
 {
-    internal class ReturnedBookDto
+    public class RefreshTokenDto
     {
+        public string RefreshToken { get; set; }
     }
 }
