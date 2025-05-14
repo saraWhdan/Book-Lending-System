@@ -34,10 +34,10 @@ namespace BookLendingSystem.Application.Services
             return _mapper.Map<BookDto>(book);
         }
 
-        public async Task AddBookAsync(CreateBookDto dto)
+        public async Task<Book> AddBookAsync(CreateBookDto dto)
         {
             var book = _mapper.Map<Book>(dto);
-            await _bookRepo.Create(book);
+         return   await _bookRepo.Create(book);
         }
 
         public async Task UpdateBookAsync(int id, CreateBookDto dto)

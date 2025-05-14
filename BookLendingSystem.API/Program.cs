@@ -93,7 +93,7 @@ app.MapControllers();
 using (var scope3 = app.Services.CreateScope())
 {
 
-    RecurringJob.AddOrUpdate<EmailService>(
+    RecurringJob.AddOrUpdate<EmailService>("delayed books",
     job => job.SendEmailReturnAsync(),
     Cron.Daily);
 

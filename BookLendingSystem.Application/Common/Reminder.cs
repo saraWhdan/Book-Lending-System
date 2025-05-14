@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookLendingSystem.Application.Common
 {
-    public class SendingEmail
+    public class Reminder
     {
         public string MemberEmail { get; set; }
         public string MemberName { get; set; }

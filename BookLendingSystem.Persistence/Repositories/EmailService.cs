@@ -24,11 +24,11 @@ namespace BookLendingSystem.Persistence.Repositories
         }
 
 
-        public async Task<IEnumerable<SendingEmail>> GetMemberReturnAsyn()
+        public async Task<IEnumerable<Reminder>> GetMemberReturnAsyn()
         {
             var day = DateTime.Today;
-            List<SendingEmail> result = new List<SendingEmail>();
-            var value = await bookContext.BorrowedBooks.Where(x => !x.IsReturned && x.ActionDate < day).Select(x => new SendingEmail
+            List<Reminder> result = new List<Reminder>();
+            var value = await bookContext.BorrowedBooks.Where(x => !x.IsReturned && x.ActionDate < day).Select(x => new Reminder
             {
                 MemberName = x.Member.UserName,
                 BookName = x.Book.Title,
@@ -53,7 +53,7 @@ namespace BookLendingSystem.Persistence.Repositories
                 Credentials = new NetworkCredential(emailSetting.Username, emailSetting.Password),
                 EnableSsl = true,
             };
-            foreach (SendingEmail sendingEmail in sendingEmails)
+            foreach (Reminder sendingEmail in sendingEmails)
             {
                 var mailMessage = new MailMessage
                 {

@@ -1,4 +1,5 @@
 ﻿using BookLendingSystem.Application.Dtos;
+using BookLendingSystem.Domain.Entities.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BookLendingSystem.Application.Interfaces.IServices
 
         Task<BookDto> GetBookByIdAsync(int id);
             Task<IEnumerable<BookDto>> GetAllBooksAsync();
-            Task AddBookAsync(CreateBookDto dto);
+            Task <Book>AddBookAsync(CreateBookDto dto);
             Task UpdateBookAsync(int id, CreateBookDto dto);
             Task DeleteBookAsync(int id);
         

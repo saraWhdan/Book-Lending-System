@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLendingSystem.Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundJobs", "BackgroundJobs", "{44662812-9ADB-4C55-B540-E9BD31C1BE27}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EFCB72AA-1F0A-4A2A-AC02-216CCD2B1F39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLendingSystem.Test", "BookLendingSystem.Test\BookLendingSystem.Test.csproj", "{31A14328-C7B9-4728-9BAC-67D492AF7A97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,10 @@ Global
 		{63EA7C25-C1B5-4BEB-A9AE-7728D0A9F6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EA7C25-C1B5-4BEB-A9AE-7728D0A9F6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63EA7C25-C1B5-4BEB-A9AE-7728D0A9F6BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A14328-C7B9-4728-9BAC-67D492AF7A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A14328-C7B9-4728-9BAC-67D492AF7A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A14328-C7B9-4728-9BAC-67D492AF7A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A14328-C7B9-4728-9BAC-67D492AF7A97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +65,7 @@ Global
 		{5515ACD3-E980-4F75-A6E9-E677C770CD1C} = {9754345F-0E14-414E-BA09-1E1E734D92CB}
 		{29418984-7010-426F-B447-DF06808528FB} = {BFA19AF4-4F0B-4F92-9D08-14D0809E700F}
 		{63EA7C25-C1B5-4BEB-A9AE-7728D0A9F6BC} = {BFA19AF4-4F0B-4F92-9D08-14D0809E700F}
+		{31A14328-C7B9-4728-9BAC-67D492AF7A97} = {EFCB72AA-1F0A-4A2A-AC02-216CCD2B1F39}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C6DFC8D-BF05-4250-BF5A-1E3DC2D1BD70}
