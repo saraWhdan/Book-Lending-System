@@ -1,4 +1,5 @@
 ﻿using BookLendingSystem.Application.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +15,14 @@ namespace BookLendingSystem.API.Controllers
         {
             _service = service;
         }
-
+        [Authorize]
         [HttpPost("borrow")]
         public async Task<IActionResult> Borrow([FromQuery] string memberId, [FromQuery] int bookId)
         {
             await _service.BorrowBookAsync(memberId, bookId);
             return Ok();
         }
+        [Authorize]
 
         [HttpPost("return/{borrowId}")]
         public async Task<IActionResult> Return(int borrowId)

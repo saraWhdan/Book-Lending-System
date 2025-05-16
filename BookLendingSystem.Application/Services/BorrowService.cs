@@ -16,14 +16,14 @@ namespace BookLendingSystem.Application.Services
         private readonly IBorrowedBookRepository _borrowRepo;
         private readonly IBaseRepository<Book> _bookRepo;
         private readonly IMapper _mapper;
-        private readonly int _borrowDays;
+     
 
-        public BorrowService(IBorrowedBookRepository borrowRepo, IBaseRepository<Book> bookRepo, IMapper mapper, IConfiguration config)
+        public BorrowService(IBorrowedBookRepository borrowRepo, IBaseRepository<Book> bookRepo, IMapper mapper)
         {
             _borrowRepo = borrowRepo;
             _bookRepo = bookRepo;
             _mapper = mapper;
-            _borrowDays = 7;
+          
         }
 
         public async Task BorrowBookAsync(string memberId, int bookId)
@@ -37,7 +37,7 @@ namespace BookLendingSystem.Application.Services
                 BookId = bookId,
                 MemberId = memberId,
                 BorrowDate = DateTime.UtcNow,
-                ReturnDate = DateTime.UtcNow.AddDays(_borrowDays)
+                ReturnDate = null
             };
 
             book.Quantity--;
@@ -48,7 +48,7 @@ namespace BookLendingSystem.Application.Services
         public async Task ReturnBookAsync(int borrowId)
         {
             var borrowed = await _borrowRepo.GetByIdAsync(borrowId);
-            if (borrowed == null || borrowed.ReturnDate == null)
+            if (borrowed == null )
                 throw new Exception("Invalid return");
 
             borrowed.ReturnDate = DateTime.UtcNow;

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using BookLendingSystem.Infrastructure.Identity;
+
 
 namespace BookLendingSystem.Domain.Entities.Business
 {
@@ -27,7 +27,7 @@ namespace BookLendingSystem.Domain.Entities.Business
         public bool IsReturned { get; set; }
 
         public Book Book { get; set; }
-        // need navigation property for user
+        // navigation property for user
         public ApplicationUser Member { get; set; }
 
     }
