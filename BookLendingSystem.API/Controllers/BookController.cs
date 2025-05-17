@@ -1,6 +1,7 @@
 ﻿using BookLendingSystem.Application.Common;
 using BookLendingSystem.Application.Dtos;
 using BookLendingSystem.Application.Interfaces.IServices;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,20 +20,21 @@ namespace BookLendingSystem.API.Controllers
             _service = service;
         }
         [Authorize]
-        [HttpGet]
+             [HttpGet]
         public async Task<IActionResult> Get() => Ok(await _service.GetAllBooksAsync());
+        [Authorize(Roles = nameof(AuthConstants.AdminRole))]
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => Ok(await _service.GetBookByIdAsync(id));
-
         [Authorize(Roles = AuthConstants.AdminRole)]
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateBookDto dto)
         {
             await _service.AddBookAsync(dto);
             return Ok();
         }
-        [Authorize(Roles = AuthConstants.AdminRole)]
+        [Authorize(Roles = nameof(AuthConstants.AdminRole))]
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] CreateBookDto dto)
@@ -41,6 +43,7 @@ namespace BookLendingSystem.API.Controllers
             return Ok();
         }
         [Authorize(Roles = AuthConstants.AdminRole)]
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,7 +1,9 @@
-﻿using BookLendingSystem.Application.Interfaces.IRepositories;
+﻿using BookLendingSystem.Application.Common;
+using BookLendingSystem.Application.Interfaces.IRepositories;
 using BookLendingSystem.Domain.Entities.Business;
 using BookLendingSystem.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,14 @@ namespace BookLendingSystem.Persistence.Repositories
     public class BorrowedBookRepository : IBorrowedBookRepository
     {
         private readonly ApplicationDbContext _context;
-        public BorrowedBookRepository(ApplicationDbContext context) => _context = context;
-
+        private readonly BorrowSettings _borrowSettings;
+        public BorrowedBookRepository(ApplicationDbContext context, IOptions<BorrowSettings> options)
+        {
+            _context = context;
+            _borrowSettings = options.Value;
+        }
         public async Task<BorrowedBook> GetBorrowedBookByUserAsync(string memberId) =>
-            await _context.BorrowedBooks.FirstOrDefaultAsync(b => b.MemberId == memberId && b.ReturnDate == null);
+              await _context.BorrowedBooks.FirstOrDefaultAsync(b => b.MemberId == memberId && b.ReturnDate == null);
 
         public async Task AddAsync(BorrowedBook borrowed)
         {
@@ -25,16 +31,14 @@ namespace BookLendingSystem.Persistence.Repositories
 
         public async Task<BorrowedBook> GetByIdAsync(int id)
         {
-           
-             var data=   await _context.BorrowedBooks.FindAsync(id);
+            var data = await _context.BorrowedBooks.FindAsync(id);
             return data is null ? throw new InvalidOperationException("No data Found") : data;
-
         }
 
         public async Task<IEnumerable<BorrowedBook>> GetOverdueBooksAsync(DateTime today)
         {
             return await _context.BorrowedBooks
-                .Where(b => b.ReturnDate == null && b.BorrowDate.AddDays(7) < today)
+                .Where(b => b.ReturnDate == null && b.BorrowDate.AddDays(_borrowSettings.BorrowPeriodInDays) < today)
                 .ToListAsync();
         }
 

@@ -26,7 +26,7 @@ namespace BookLendingSystem.Infrastructure.Identity
         }
 
         public async Task<string> GenerateAccessTokenAsync(ApplicationUser user)
-        {
+        {// check the roles 
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>
         {
@@ -45,6 +45,7 @@ namespace BookLendingSystem.Infrastructure.Identity
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
                 claims: claims,
                 signingCredentials: creds
+               
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

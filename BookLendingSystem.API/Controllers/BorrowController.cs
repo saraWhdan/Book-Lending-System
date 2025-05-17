@@ -1,6 +1,9 @@
-﻿using BookLendingSystem.Application.Interfaces.IServices;
+﻿using BookLendingSystem.Application.Dtos;
+using BookLendingSystem.Application.Interfaces.IServices;
+using BookLendingSystem.Domain.Entities.Business;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLendingSystem.API.Controllers
@@ -9,32 +12,47 @@ namespace BookLendingSystem.API.Controllers
     [ApiController]
     public class BorrowController : ControllerBase
     {
-        private readonly IBorrowService _service;
+        private readonly IBorrowService _borrowService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BorrowController(IBorrowService service)
+        public BorrowController(IBorrowService borrowService, UserManager<ApplicationUser> userManager)
         {
-            _service = service;
+            _borrowService = borrowService;
+            _userManager = userManager;
         }
-        [Authorize]
+
         [HttpPost("borrow")]
-        public async Task<IActionResult> Borrow([FromQuery] string memberId, [FromQuery] int bookId)
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> BorrowBook([FromBody] BorrowBookDto dto)
         {
-            await _service.BorrowBookAsync(memberId, bookId);
-            return Ok();
+            var userId = _userManager.GetUserId(User);
+            var result = await _borrowService.BorrowBookAsync(dto, userId);
+            return Ok(result);
         }
-        [Authorize]
 
-        [HttpPost("return/{borrowId}")]
-        public async Task<IActionResult> Return(int borrowId)
+        [HttpGet("current")]
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> GetCurrentBorrowedBook()
         {
-            await _service.ReturnBookAsync(borrowId);
-            return Ok();
+            var userId = _userManager.GetUserId(User);
+            var result = await _borrowService.GetCurrentBorrowedBookAsync(userId);
+
+            return Ok(result);
         }
 
         [HttpGet("overdue")]
-        public async Task<IActionResult> Overdue()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetOverdueBooks()
         {
-            var result = await _service.GetOverdueBooksAsync();
+            var result = await _borrowService.GetOverdueBooksAsync();
+            return Ok(result);
+        }
+        [HttpPost("return")]
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> ReturnBook()
+        {
+            var userId = _userManager.GetUserId(User);
+            var result = await _borrowService.ReturnBookAsync(userId);
             return Ok(result);
         }
     }

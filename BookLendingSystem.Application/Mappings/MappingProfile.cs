@@ -15,6 +15,8 @@ namespace BookLendingSystem.Application.Mappings
         {
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<CreateBookDto, Book>().ReverseMap();
+            CreateMap<BorrowedBook, BorrowedBookDto>().ReverseMap(); 
+            CreateMap<BorrowBookDto, BorrowedBook>().ReverseMap();
         }
     }
 }

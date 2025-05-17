@@ -19,11 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLendingSystem.Persisten
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLendingSystem.Infrastructure", "BookLendingSystem.Infrastructure\BookLendingSystem.Infrastructure.csproj", "{63EA7C25-C1B5-4BEB-A9AE-7728D0A9F6BC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundJobs", "BackgroundJobs", "{44662812-9ADB-4C55-B540-E9BD31C1BE27}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EFCB72AA-1F0A-4A2A-AC02-216CCD2B1F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLendingSystem.Test", "BookLendingSystem.Test\BookLendingSystem.Test.csproj", "{31A14328-C7B9-4728-9BAC-67D492AF7A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLendingSystem.Test", "BookLendingSystem.Test\BookLendingSystem.Test.csproj", "{31A14328-C7B9-4728-9BAC-67D492AF7A97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

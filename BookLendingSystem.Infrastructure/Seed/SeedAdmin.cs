@@ -30,8 +30,16 @@ namespace BookLendingSystem.Infrastructure.Seed
 
                     await userManager.AddToRoleAsync(user, SettingAdmin.Role);
                 }
-
-            }
+                else
+                {
+                    
+                    var roles = await userManager.GetRolesAsync(user);
+                    if (!roles.Contains(SettingAdmin.Role))
+                    {
+                        await userManager.AddToRoleAsync(user, SettingAdmin.Role);
+                    }
+                }
+                }
         }
     }
 }

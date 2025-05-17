@@ -1,4 +1,5 @@
-﻿using BookLendingSystem.Domain.Entities.Business;
+﻿using BookLendingSystem.Application.Dtos;
+using BookLendingSystem.Domain.Entities.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace BookLendingSystem.Application.Interfaces.IServices
 {
     public interface IBorrowService
     {
-        Task BorrowBookAsync(string memberId, int bookId);
-        Task ReturnBookAsync(int borrowId);
-        Task<IEnumerable<BorrowedBook>> GetOverdueBooksAsync();
+        Task<BorrowedBookDto> BorrowBookAsync(BorrowBookDto dto, string userId);
+        Task<BorrowedBookDto> GetCurrentBorrowedBookAsync(string userId);
+        Task<IEnumerable<BorrowedBookDto>> GetOverdueBooksAsync();
+        Task<BorrowedBookDto> ReturnBookAsync(string userId);
     }
 
 }
