@@ -19,9 +19,17 @@ using BookLendingSystem.Domain.Entities.Business;
 using Hangfire;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using Serilog;
+using BookLendingSystem.API;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .Enrich.FromLogContext()
+    .CreateLogger();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -38,26 +46,50 @@ builder.Services.AddScoped<IAuthService, JwtService>();
 
 
 
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    var jwtSettings = builder.Configuration.GetSection("JWT").Get<JWT>();
+
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = jwtSettings.Issuer,
+//        ValidAudience = jwtSettings.Audience,
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+//        ClockSkew=TimeSpan.FromSeconds(1),
+//        RoleClaimType = ClaimTypes.Role
+//    };
+//});
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+          .AddEntityFrameworkStores<ApplicationDbContext>()
+          ;
 builder.Services.AddAuthentication(options =>
 {
+    //Check JWT Token Header
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+    //[authrize]
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;//unauth
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
 {
-    var jwtSettings = builder.Configuration.GetSection("JWT").Get<JWT>();
-
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings.Issuer,
-        ValidAudience = jwtSettings.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
-        ClockSkew=TimeSpan.FromSeconds(1),
-        RoleClaimType = "role"
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
 });
 
@@ -97,9 +129,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddHangfireServer();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-          .AddEntityFrameworkStores<ApplicationDbContext>()
-          .AddDefaultTokenProviders();
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 await DefaultRoles.SeedAsync(scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>());
@@ -116,10 +147,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+
 //Hangfire
 app.UseHangfireDashboard();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 using (var scope3 = app.Services.CreateScope())
 {
